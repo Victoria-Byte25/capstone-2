@@ -4,14 +4,14 @@ A Java CLI point-of-sale app for building custom sandwiches called Build-a-Bite.
 
 ## Features
 
-- Custom sandwich builder (size, bread, toppings, sauces, toasted)
-- Extra meat & cheese add-ons
-- Drink & chip options
-- Total cost calculator
-- Receipt file saved to `receipts/` with timestamp
-- Easy-to-use terminal menus
+-Custom sandwich builder (size, bread, toppings, sauces, toasted)
+-Extra meat & cheese add-ons
+-Drink & chip options
+-Total cost calculator
+-Receipt file saved to `receipts/` with timestamp
+-Easy-to-use terminal menus
 
-## Class Diagram
+## Project Diagram
 
 This diagram shows how the classes are structured and interact in the system:
 

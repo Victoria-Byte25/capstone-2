@@ -31,7 +31,7 @@ public class Sandwich {
         this.toasted = toasted;
     }
 
-    public void setMeats(String meat) {
+    public void addMeat(String meat) {
         meats.add(meat);
     }
     public void addCheese(String cheese) {

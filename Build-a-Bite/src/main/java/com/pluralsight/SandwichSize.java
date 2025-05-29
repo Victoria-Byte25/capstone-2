@@ -1,14 +1,20 @@
 package com.pluralsight;
 
 public enum SandwichSize {
-    SMALL_4(5.50),
-    MEDIUM_8(7.00),
-    LARGE_12(8.50);
+    FOUR(4, 5.50),
+    EIGHT(8, 7.00),
+    TWELVE(12, 8.50);
 
-    private double basePrice;
+    private final int inches;
+    private final double basePrice;
 
-    SandwichSize(double price) {
-        this.basePrice = price;
+    SandwichSize(int inches, double basePrice) {
+        this.inches = inches;
+        this.basePrice = basePrice;
+    }
+
+    public int getInches() {
+        return inches;
     }
 
     public double getBasePrice() {
@@ -17,7 +23,15 @@ public enum SandwichSize {
 
     @Override
     public String toString() {
-        return name().replace("_", " ").replace("4", "4\"").replace("8", "8\"").replace("12", "12\"");
+        return inches + "\"";
+    }
+
+    public static SandwichSize fromInput(String input) {
+        return switch (input) {
+            case "4" -> FOUR;
+            case "8" -> EIGHT;
+            case "12" -> TWELVE;
+            default -> null;
+        };
     }
 }
-

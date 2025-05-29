@@ -4,59 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private List<Sandwich> sandwiches;
-    private List<Drink> drinks;
-    private List<Chip> chips;
-    private static final double Tax_RATE = 0.05;
+    private List<Sandwich> sandwiches = new ArrayList<>();
+    private List<Drink> drinks = new ArrayList<>();
+    private List<Chip> chips = new ArrayList<>();
 
-    public Order() {
-        sandwiches = new ArrayList<>();
-        drinks = new ArrayList<>();
-        chips = new ArrayList<>();
-    }
     public void addSandwich(Sandwich sandwich) {
         sandwiches.add(sandwich);
     }
+
     public void addDrink(Drink drink) {
         drinks.add(drink);
     }
+
     public void addChip(Chip chip) {
         chips.add(chip);
     }
-    public void printOrder() {
-        System.out.println("\n---- SANDWICHES---");
-        for (int i = 0; i < sandwiches.size(); i++) {
-            System.out.println("Sandwich" + (i + 1) + ":");
-            System.out.println(sandwiches.get(i));
-        }
 
-        System.out.println("\n----DRINKS----");
-        for (Drink drink : drinks) {
-            System.out.println(drink);
-            System.out.println("\n----CHIPS----");
-            System.out.println(chip);
-        }
-        System.out.printf("\n Total Price: $%.2f\n", getSubtotal());
-        System.out.println("Tax (5%%): $%.2f\n", getTax());
-        System.out.println(" Final Total: $%.2f\n", getFinalTotal());
+    public void checkout() {
+        double total = 0;
+        for (Sandwich s : sandwiches) total += s.getPrice();
+        for (Drink d : drinks) total += d.getPrice();
+        for (Chip c : chips) total += c.getPrice();
+
+        ReceiptWriter.writeReceipt(this);
+        System.out.println("Order total: $" + String.format("%.2f", total));
     }
-    public double getSubtotal() {
-        double total = 0.0;
-        for (Sandwich sandwich : sandwiches) {
-            total += sandwich.getPrice();
-        }
-        for (Drink drink : drinks) {
-            total += drink.getPrice
-        }
-        for (Chip chip : chips) {
-            total += chip.getPrice();
-        }
-        return total;
+
+    public List<Sandwich> getSandwiches() {
+        return sandwiches;
     }
-    public double getTax() {
-        return getSubtotal() * Tax_RATE;
+
+    public List<Drink> getDrinks() {
+        return drinks;
     }
-    public double getFinalTotal() {
-        return getSubtotal() + getTax();
+
+    public List<Chip> getChips() {
+        return chips;
     }
 }

@@ -1,79 +1,49 @@
 package com.pluralsight;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class CustomSandwich  extends Sandwich{
-    public void buildSandwich() {
-        Scanner scanner = new Scanner(System.in);
+public class CustomSandwich extends Sandwich {
+    private List<Topping> meats = new ArrayList<>();
+    private List<Topping> cheeses = new ArrayList<>();
+    private List<Topping> regulars = new ArrayList<>();
+    private List<Topping> sauces = new ArrayList<>();
 
-        System.out.println("Choose your sandwich size:");
-        System.out.println("1) 4-inch");
-        System.out.println("2) 8-inch");
-        System.out.println("3) 12-inch");
-        System.out.println("Your choice is: ");
-        int sizeChoice = Integer.parseInt(scanner.nextLine());
+    public CustomSandwich(Scanner scanner) {
+        System.out.println("Select bread:");
+        this.bread = MenuHelper.chooseFromList(scanner, MenuHelper.getBreadOptions());
 
-        switch (sizeChoice) {
-            case 1 -> setSize(SandwichSize.SMALL_4);
-            case 2 -> setSize(SandwichSize.MEDIUM_8);
-            case 3 -> setSize(SandwichSize.LARGE_12);
-            default -> {
-                System.out.println("Invalid option. Defaulting to 8-inch.");
-                setSize(SandwichSize.MEDIUM_8);
-            }
-        }
-        System.out.println("Choose your bread please:");
-        System.out.println("1) White");
-        System.out.println("2) Wheat");
-        System.out.println("3) Rye");
-        System.out.println("4) Wrap");
-        System.out.println("You chose: ");
-        String breadChoice = scanner.nextLine();
+        System.out.println("Select size (4/8/12):");
+        this.size = SandwichSize.fromInput(scanner.nextLine());
 
-        switch (breadChoice) {
-            case "1" -> setBreadType("White");
-            case "2" -> setBreadType("Wheat");
-            case "3" -> setBreadType("Rye");
-            case "4" -> setBreadType("Wrap");
-            default -> {
-                System.out.println("Invalid bread choice. Defaulting to White.");
-                setBreadType("White");
-            }
-        }
+        System.out.println("Select meats:");
+        this.meats = MenuHelper.multiSelect(scanner, MenuHelper.getMeatOptions(), ToppingType.MEAT);
 
-        System.out.println("Do you want toasted? (yes/no): ");
-        String toastAnswer = scanner.nextLine();
-        setToasted(toastAnswer.equalsIgnoreCase("yes"));
+        System.out.println("Select cheeses:");
+        this.cheeses = MenuHelper.multiSelect(scanner, MenuHelper.getCheeseOptions(), ToppingType.CHEESE);
 
-        System.out.println("Add meats (type 'done' to finish): ");
-        while (true) {
-            System.out.println("Add meat: ");
-            String meat = scanner.nextLine();
-            if (meat.equalsIgnoreCase("done")) break;
-            addMeat(meat);
+        System.out.println("Select toppings:");
+        this.regulars = MenuHelper.multiSelect(scanner, MenuHelper.getRegularToppings(), ToppingType.REGULAR);
 
-            System.out.println("Add cheeses (type 'done' to finish): ");
-            while (true) {
-                System.out.println("Add cheese: ");
-                String cheese = scanner.nextLine();
-                if (cheese.equalsIgnoreCase("done")) break;
-                addCheese(cheese);
+        System.out.println("Select sauces:");
+        this.sauces = MenuHelper.multiSelect(scanner, MenuHelper.getSauces(), ToppingType.SAUCE);
 
-                System.out.println("Add regular toppings (type 'done' to finish): ");
-                while (true) {
-                    System.out.println("Add topping: ");
-                    String topping = scanner.nextLine();
-                    if (topping.equalsIgnoreCase("done")) break;
-                    addTopping(topping);
-                }
-                System.out.println("Add sauces (type 'done' to finish): ");
-                while (true) {
-                    System.out.println("Add sauce: ");
-                    String sauce = scanner.nextLine();
-                    addSauce(sauce);
-                }
-            }
-        }
+        System.out.println("Toasted? (yes/no)");
+        this.toasted = scanner.nextLine().equalsIgnoreCase("yes");
     }
 
+    public double getPrice() {
+        double price = size.getBasePrice();
+
+        for (Topping meat : meats) price += meat.getPrice(size);
+        for (Topping cheese : cheeses) price += cheese.getPrice(size);
+
+        return price;
+    }
+
+    public String getDetails() {
+        return size + " " + bread + " " + (toasted ? "Toasted" : "Not Toasted");
+    }
 }
+

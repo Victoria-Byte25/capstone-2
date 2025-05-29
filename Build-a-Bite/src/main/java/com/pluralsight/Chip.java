@@ -1,18 +1,16 @@
 package com.pluralsight;
 
+import java.util.Scanner;
+
 public class Chip {
     private String type;
 
-    public Chip(String type) {
-        this.type = type;
+    public Chip(Scanner scanner) {
+        System.out.println("Enter chip type:");
+        this.type = scanner.nextLine();
     }
 
     public double getPrice() {
         return 1.50;
-    }
-
-    @Override
-    public String toString() {
-        return type + "Chips ($" + String.format("%.2f", getPrice()) + ")";
     }
 }

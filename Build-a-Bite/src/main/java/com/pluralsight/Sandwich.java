@@ -3,23 +3,19 @@ package com.pluralsight;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sandwich {
+public abstract class Sandwich {
     private SandwichSize size;
     private String breadType;
-    private boolean toasted;
-    private List<String> meats;
-    private List<String> cheeses;
-    private List<String> regualrToppings;
-    private List<String> sauces;
+    private boolean isToasted;
 
-    public Sandwich () {
-        meats = new ArrayList<>();
-        cheeses =new ArrayList<>();
-        regualrToppings = new ArrayList<>();
-        sauces = new ArrayList<>();
-        toasted = false;
-    }
+    private List<String> meats = new ArrayList<>();
+    private List<String> cheeses = new ArrayList<>();
+    private List<String> sauces = new ArrayList<>();
 
+    // Real topping support!
+    private List<Topping> toppings = new ArrayList<>();
+
+    // === Setters ===
     public void setSize(SandwichSize size) {
         this.size = size;
     }
@@ -27,59 +23,76 @@ public class Sandwich {
     public void setBreadType(String breadType) {
         this.breadType = breadType;
     }
+
     public void setToasted(boolean toasted) {
-        this.toasted = toasted;
+        isToasted = toasted;
     }
 
+    // === Ingredient ===
     public void addMeat(String meat) {
         meats.add(meat);
     }
+
     public void addCheese(String cheese) {
         cheeses.add(cheese);
     }
-    public void addTopping(String topping) {
-        regualrToppings.add(topping);
-    }
+
     public void addSauce(String sauce) {
         sauces.add(sauce);
     }
+
+    // Add toppings (regular or premium)
+    public void addTopping(String name, boolean isPremium) {
+        toppings.add(new Topping(name, isPremium));
+    }
+
+    // === Getters ===
     public SandwichSize getSize() {
         return size;
     }
 
-    public List<String> getMeats() {
-        return meats;
+    public List<Topping> getToppings() {
+        return toppings;
     }
 
-    public List<String> getCheeses() {
-        return cheeses;
-    }
+    // === Pricing ===
     public double calculatePrice() {
-        double price = size.getBasePrice();
-
-        double meatPrice = switch (size) {
-            case SMALL_4 -> 1.00;
-            case MEDIUM_8 -> 2.00;
-            case LARGE_12 -> 3.00;
+        double price = switch (size) {
+            case SMALL_4 -> 5.00;
+            case MEDIUM_8 -> 7.00;
+            case LARGE_12 -> 8.50;
         };
 
-        double cheesePrice = switch (size) {
-            case SMALL_4 -> 0.75;
-            case MEDIUM_8 -> 1.50;
-            case LARGE_12 -> 2.25;
-        };
-        price += meats.size() * meatPrice;
-        price += cheeses.size() * cheesePrice;
+        for (Topping topping : toppings) {
+            price += topping.getPrice(); // $1.00 if premium
+        }
+
         return price;
     }
+
+    // === Pretty display ===
     @Override
     public String toString() {
-        return size + " " + breadType + (toasted ? "(Toasted)" : "") + "\n" +
-                "Meats: " + meats + "\n" +
-                "Cheeses: " + cheeses + "\n" +
-                "Toppings: " + regualrToppings + "\n" +
-                "Sauces: " + sauces + "\n" +
-                String.format("Sandwich Price: $%.2f", calculatePrice());
+        StringBuilder sb = new StringBuilder();
 
+        sb.append(size).append(" Sandwich on ").append(breadType);
+        if (isToasted) sb.append(" (Toasted)");
+        sb.append("\n");
+
+        if (!meats.isEmpty()) sb.append("Meats: ").append(meats).append("\n");
+        if (!cheeses.isEmpty()) sb.append("Cheeses: ").append(cheeses).append("\n");
+
+        if (!toppings.isEmpty()) {
+            sb.append("Toppings: ");
+            for (Topping t : toppings) {
+                sb.append(t.toString()).append(", ");
+            }
+            sb.setLength(sb.length() - 2); // remove last comma
+            sb.append("\n");
+        }
+
+        if (!sauces.isEmpty()) sb.append("Sauces: ").append(sauces).append("\n");
+
+        return sb.toString();
     }
 }

@@ -1,79 +1,119 @@
 package com.pluralsight;
 
+import java.util.List;
 import java.util.Scanner;
 
-public class CustomSandwich  extends Sandwich{
-    public void buildSandwich() {
-        Scanner scanner = new Scanner(System.in);
+public class CustomSandwich extends Sandwich {
+    private Scanner scanner = new Scanner(System.in);
 
+    public void build() {
+        System.out.println("Let’s build your sandwich! ");
+
+        // === 1. Choose Size ===
         System.out.println("Choose your sandwich size:");
-        System.out.println("1) 4-inch");
-        System.out.println("2) 8-inch");
-        System.out.println("3) 12-inch");
-        System.out.println("Your choice is: ");
-        int sizeChoice = Integer.parseInt(scanner.nextLine());
+        System.out.println("1. Small (4\")\n2. Medium (8\")\n3. Large (12\")");
+        int sizeChoice = scanner.nextInt();
+        scanner.nextLine();
+        setSize(switch (sizeChoice) {
+            case 1 -> SandwichSize.SMALL_4;
+            case 2 -> SandwichSize.MEDIUM_8;
+            default -> SandwichSize.LARGE_12;
+        });
 
-        switch (sizeChoice) {
-            case 1 -> setSize(SandwichSize.SMALL_4);
-            case 2 -> setSize(SandwichSize.MEDIUM_8);
-            case 3 -> setSize(SandwichSize.LARGE_12);
-            default -> {
-                System.out.println("Invalid option. Defaulting to 8-inch.");
-                setSize(SandwichSize.MEDIUM_8);
-            }
+        // === 2. Bread Type ===
+        List<String> breads = List.of("White", "Wheat", "Sourdough", "Rye");
+        System.out.println("Pick a bread type:");
+        for (int i = 0; i < breads.size(); i++) {
+            System.out.printf("%d. %s\n", i + 1, breads.get(i));
         }
-        System.out.println("Choose your bread please:");
-        System.out.println("1) White");
-        System.out.println("2) Wheat");
-        System.out.println("3) Rye");
-        System.out.println("4) Wrap");
-        System.out.println("You chose: ");
-        String breadChoice = scanner.nextLine();
-
-        switch (breadChoice) {
-            case "1" -> setBreadType("White");
-            case "2" -> setBreadType("Wheat");
-            case "3" -> setBreadType("Rye");
-            case "4" -> setBreadType("Wrap");
-            default -> {
-                System.out.println("Invalid bread choice. Defaulting to White.");
-                setBreadType("White");
-            }
+        int breadChoice = scanner.nextInt();
+        scanner.nextLine();
+        if (breadChoice >= 1 && breadChoice <= breads.size()) {
+            setBreadType(breads.get(breadChoice - 1));
+        } else {
+            setBreadType("White");
         }
 
-        System.out.println("Do you want toasted? (yes/no): ");
-        String toastAnswer = scanner.nextLine();
-        setToasted(toastAnswer.equalsIgnoreCase("yes"));
+        // === 3. Toasted? ===
+        System.out.println("Would you like it toasted? (yes/no)");
+        String toasted = scanner.nextLine();
+        setToasted(toasted.equalsIgnoreCase("yes"));
 
-        System.out.println("Add meats (type 'done' to finish): ");
+        // === 4. Meats ===
+        List<String> meats = List.of("Turkey", "Ham", "Beef", "Salami", "Chicken");
+        System.out.println("Choose meats (type 0 to finish):");
         while (true) {
-            System.out.println("Add meat: ");
-            String meat = scanner.nextLine();
-            if (meat.equalsIgnoreCase("done")) break;
-            addMeat(meat);
-
-            System.out.println("Add cheeses (type 'done' to finish): ");
-            while (true) {
-                System.out.println("Add cheese: ");
-                String cheese = scanner.nextLine();
-                if (cheese.equalsIgnoreCase("done")) break;
-                addCheese(cheese);
-
-                System.out.println("Add regular toppings (type 'done' to finish): ");
-                while (true) {
-                    System.out.println("Add topping: ");
-                    String topping = scanner.nextLine();
-                    if (topping.equalsIgnoreCase("done")) break;
-                    addTopping(topping);
-                }
-                System.out.println("Add sauces (type 'done' to finish): ");
-                while (true) {
-                    System.out.println("Add sauce: ");
-                    String sauce = scanner.nextLine();
-                    addSauce(sauce);
-                }
+            for (int i = 0; i < meats.size(); i++) {
+                System.out.printf("%d. %s\n", i + 1, meats.get(i));
+            }
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            if (choice == 0) break;
+            if (choice >= 1 && choice <= meats.size()) {
+                addMeat(meats.get(choice - 1));
             }
         }
-    }
 
+        // === 5. Cheeses ===
+        List<String> cheeses = List.of("American", "Swiss", "Cheddar", "Provolone");
+        System.out.println("Choose cheeses (type 0 to finish):");
+        while (true) {
+            for (int i = 0; i < cheeses.size(); i++) {
+                System.out.printf("%d. %s\n", i + 1, cheeses.get(i));
+            }
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            if (choice == 0) break;
+            if (choice >= 1 && choice <= cheeses.size()) {
+                addCheese(cheeses.get(choice - 1));
+            }
+        }
+
+        // === 6. Sauces ===
+        List<String> sauces = List.of("Mayo", "Mustard", "BBQ", "Ranch", "Vinaigrette");
+        System.out.println("Choose sauces (type 0 to finish):");
+        while (true) {
+            for (int i = 0; i < sauces.size(); i++) {
+                System.out.printf("%d. %s\n", i + 1, sauces.get(i));
+            }
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            if (choice == 0) break;
+            if (choice >= 1 && choice <= sauces.size()) {
+                addSauce(sauces.get(choice - 1));
+            }
+        }
+
+        // === 7. Regular Toppings ===
+        List<String> regularToppings = List.of("Lettuce", "Tomato", "Pickles", "Cucumber");
+        System.out.println("Choose regular toppings (type 0 to finish):");
+        while (true) {
+            for (int i = 0; i < regularToppings.size(); i++) {
+                System.out.printf("%d. %s\n", i + 1, regularToppings.get(i));
+            }
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            if (choice == 0) break;
+            if (choice >= 1 && choice <= regularToppings.size()) {
+                addTopping(regularToppings.get(choice - 1), false);
+            }
+        }
+
+        // === 8. Premium Toppings ===
+        List<String> premiumToppings = List.of("Avocado", "Bacon", "Fried Egg");
+        System.out.println("Choose premium toppings ($1.00 each, type 0 to finish):");
+        while (true) {
+            for (int i = 0; i < premiumToppings.size(); i++) {
+                System.out.printf("%d. %s\n", i + 1, premiumToppings.get(i));
+            }
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            if (choice == 0) break;
+            if (choice >= 1 && choice <= premiumToppings.size()) {
+                addTopping(premiumToppings.get(choice - 1), true);
+            }
+        }
+
+        System.out.println("\n Your sandwich is ready!");
+    }
 }

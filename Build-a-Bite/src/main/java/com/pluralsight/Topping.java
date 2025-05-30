@@ -1,8 +1,8 @@
 package com.pluralsight;
 
 public class Topping {
-    private String name;
-    private ToppingType type;
+    private final String name;
+    private final ToppingType type;
 
     public Topping(String name, ToppingType type) {
         this.name = name;

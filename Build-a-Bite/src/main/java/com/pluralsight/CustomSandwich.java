@@ -29,15 +29,20 @@ public class CustomSandwich extends Sandwich {
         System.out.println("Select sauces:");
         this.sauces = MenuHelper.multiSelect(scanner, MenuHelper.getSauces(), ToppingType.SAUCE);
 
-        System.out.println("Toasted? (yes/no)");
+        System.out.println("Toasted? (yes/no):");
         this.toasted = scanner.nextLine().equalsIgnoreCase("yes");
     }
 
     public double getPrice() {
         double price = size.getBasePrice();
 
-        for (Topping meat : meats) price += meat.getPrice(size);
-        for (Topping cheese : cheeses) price += cheese.getPrice(size);
+        for (Topping meat : meats) {
+            price += meat.getPrice(size);
+        }
+
+        for (Topping cheese : cheeses) {
+            price += cheese.getPrice(size);
+        }
 
         return price;
     }
@@ -45,5 +50,20 @@ public class CustomSandwich extends Sandwich {
     public String getDetails() {
         return size + " " + bread + " " + (toasted ? "Toasted" : "Not Toasted");
     }
-}
 
+    public String getMeatsString() {
+        return meats.stream().map(Topping::getName).toList().toString();
+    }
+
+    public String getCheesesString() {
+        return cheeses.stream().map(Topping::getName).toList().toString();
+    }
+
+    public String getRegularsString() {
+        return regulars.stream().map(Topping::getName).toList().toString();
+    }
+
+    public String getSaucesString() {
+        return sauces.stream().map(Topping::getName).toList().toString();
+    }
+}

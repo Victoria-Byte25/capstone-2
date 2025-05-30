@@ -18,5 +18,8 @@ public class Drink {
             default -> 0;
         };
     }
+    public String getSize() {
+        return size;
+    }
 }
 
